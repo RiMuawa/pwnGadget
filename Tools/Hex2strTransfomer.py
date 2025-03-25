@@ -107,10 +107,14 @@ class HexToStrWindow(QWidget):
 
     def update_result(self, inputs):
         """更新输出结果"""
-        # 使用正则表达式匹配有效十六进制字符串
-        
+        if self.ignoreSpace :
+            outputs = [s.replace(" ", "") for s in inputs]
+        else:
+            outputs = inputs
+
+        # 使用正则表达式匹配有效十六进制字符串        
         pattern = re.compile(r'0x[0-9a-fA-F]+')
-        valid_hex = [match.group() for input_str in inputs for match in pattern.finditer(input_str)]
+        valid_hex = [match.group() for input_str in outputs for match in pattern.finditer(input_str)]
         #has_invalid_char = any(not bool(re.fullmatch(pattern, input_str)) for input_str in inputs)
         has_invalid_char = False
 
