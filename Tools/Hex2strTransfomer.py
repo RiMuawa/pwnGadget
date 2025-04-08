@@ -2,7 +2,7 @@ import re
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QLabel, QScrollArea, QFrame
 from PyQt6.QtCore import Qt
 
-class HexToStrWindow(QWidget):
+class HexToStr(QWidget):
     def __init__(self):
         super().__init__()
 

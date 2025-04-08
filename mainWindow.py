@@ -2,8 +2,9 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QMenuBar, QStackedWidget, QLabel, QMenu
 from PyQt6.QtGui import QAction, QActionGroup
 from PyQt6.QtGui import QKeySequence
-from Tools.Hex2strTransfomer import HexToStrWindow  # 导入第一个组件
+from Tools.Hex2strTransfomer import HexToStr  # 导入第一个组件
 from Tools.LibcGuessHelper import LibcGuessHelper  # 导入第二个组件
+from Tools.FakechunkConstructor import FakeChunk
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -33,14 +34,18 @@ class MainWindow(QMainWindow):
         self.welcome_widget = self.create_welcome_widget()
         self.stack.addWidget(self.welcome_widget)
 
-        # 添加第一个工具组件
-        self.hex_to_str_window = HexToStrWindow()
+        # 添加16进制转字符串工具
+        self.hex_to_str_window = HexToStr()
         self.hex_to_str_window.set_endian(self.current_endian)  # 初始化传递字节序
         self.stack.addWidget(self.hex_to_str_window)
 
-        # 添加第二个工具组件
+        # 添加第libc小助手工具
         self.libc_guess_helper = LibcGuessHelper()
         self.stack.addWidget(self.libc_guess_helper)
+
+        #添加fakechunk构造小工具
+        self.fake_chunk_construct = FakeChunk()
+        self.stack.addWidget(self.fake_chunk_construct)
 
         # 创建菜单栏
         self.menu_bar = QMenuBar(self)
@@ -59,6 +64,11 @@ class MainWindow(QMainWindow):
         libc_tool_action = QAction("Libc Guess Helper", self)
         libc_tool_action.triggered.connect(lambda: self.stack.setCurrentWidget(self.libc_guess_helper))
         tool_menu.addAction(libc_tool_action)
+
+        # 添加Tools菜单项：切换到 Fake Chunk Constructor
+        fake_chunk_action = QAction("Fake Trunk Constructor", self)
+        fake_chunk_action.triggered.connect(lambda: self.stack.setCurrentWidget(self.fake_chunk_construct))
+        tool_menu.addAction(fake_chunk_action)
 
         # 创建Settings菜单项: 设置大端序/小端序
         endian_menu = QMenu("端序", self)
@@ -93,7 +103,7 @@ class MainWindow(QMainWindow):
     def set_endian(self, endian):
         """设置字节序"""
         self.current_endian = endian
-        self.hex_to_str_window.set_endian(endian)  # 向 HexToStrWindow 传递字节序设置
+        self.hex_to_str_window.set_endian(endian)  # 向 HexToStr 传递字节序设置
 
     def set_ignoreSpace(self):
         self.ignoreSpace = not self.ignoreSpace
